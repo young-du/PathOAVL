@@ -24,6 +24,7 @@ class OAVLTreePathEviction : public OAVLTreeInterface {
     int getNumLevels();
     int getNumBlocks();
     int getNumBuckets();
+    void dumpStash();
 
     void insert(int key, int val);
     int search(int key);

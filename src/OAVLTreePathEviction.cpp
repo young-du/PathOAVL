@@ -60,6 +60,7 @@ void OAVLTreePathEviction::moveToLocal(int leaf, int blockid) {
             if (it->id == blockid) {
                 local.push_back(*it);
                 stash.erase(it);
+                break;
             } 
         }
     }
@@ -345,6 +346,8 @@ void OAVLTreePathEviction::evictAfterSearch() {
     }
     local[0].leaf_id = rand_gen->getRandomLeaf();
     stash.push_back(local[0]);
+    root.id = local[0].id;
+    root.leaf_id = local[0].leaf_id;
     local.pop_back();
     evictTwoPaths();
 }
@@ -447,4 +450,11 @@ int OAVLTreePathEviction::getNumBuckets() {
 
 }
 
+void OAVLTreePathEviction::dumpStash() {
+    for (auto bl: getStash()) {
+        if (bl.id != -1) {
+            cout << bl.id << " " << bl.data[0] << " "<< bl.data[1] << " "<< bl.data[2] << " "<< bl.data[3]  << " "<< bl.leftChildId  << " "<< bl.rightChildId << endl;
+        }
+    }
+}
 

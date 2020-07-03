@@ -26,6 +26,7 @@ public:
     virtual int getNumLevels() = 0;
     virtual int getNumBlocks() = 0;
     virtual int getNumBuckets() = 0;
+    virtual void dumpStash() = 0;
 };
 
 
