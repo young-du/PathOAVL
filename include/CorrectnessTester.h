@@ -4,6 +4,7 @@
 #include "Block.h"
 #include "RandomForOram.h"
 #include "OAVLTreePathEviction.h"
+#include "OAVLTreeDeterministicEviction.h"
 #include "OAVLTreeInterface.h"
 #include "RandForOramInterface.h"
 #include "UntrustedStorageInterface.h"

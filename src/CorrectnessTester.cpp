@@ -6,6 +6,7 @@
 #include "Block.h"
 #include "RandomForOram.h"
 #include "OAVLTreePathEviction.h"
+#include "OAVLTreeDeterministicEviction.h"
 #include "OAVLTreeInterface.h"
 #include "RandForOramInterface.h"
 #include "UntrustedStorageInterface.h"
@@ -43,13 +44,16 @@ void CorrectnessTester::runTester1() {
 
 
 void CorrectnessTester::runTester2() {
+
+    vector<int> stat;
+    stat.resize(10,0);
     int bucketSize = 4;
     int numBlocks = pow(2, 10);
     Bucket::setMaxSize(bucketSize);    
 
     UntrustedStorageInterface* storage = new ServerStorage();
     RandForOramInterface* random = new RandomForOram();
-    OAVLTreeInterface* oavl = new OAVLTreePathEviction(storage, random, bucketSize, numBlocks);
+    OAVLTreeInterface* oavl = new OAVLTreeDeterministicEviction(storage, random, bucketSize, numBlocks);
 
     cout << "Test begins..." << endl;
     vector<int> ele;
@@ -61,14 +65,19 @@ void CorrectnessTester::runTester2() {
     int dy = 1;
 
     for (auto e: ele) {
-        cout << dy++ << " : insert " << e << endl;
         oavl->insert(e,e);
+        if (oavl->getStashSize() > 0) {
+            cout << dy++ << " : insert " << e << endl;
+            cout << "stash size: "<< oavl->getStashSize() << endl;
+        }
     }
-    storage->dumpAllValidBlocks();
-    for (int i = 0; i < 1024; ++i) {
-        int res = oavl->search(i);
-        cout << res << endl;
+    // storage->dumpAllValidBlocks();
+    for (int i = 0; i < 3000000; ++i) {
+        int res = oavl->search(i % 1024);
+        int s = oavl->getStashSize();
+        stat[s] += 1;
     }
-    storage->dumpAllValidBlocks();
-    oavl->dumpStash();
+    for (auto r : stat) cout << r << " ";
+    // storage->dumpAllValidBlocks();
+    // oavl->dumpStash();
 }

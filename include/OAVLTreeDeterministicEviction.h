@@ -2,8 +2,8 @@
 //
 //
 
-#ifndef _OAVLTREEPATHEVICTION_H
-#define _OAVLTREEPATHEVICTION_H
+#ifndef _OAVLTREEDETEVICTION_H
+#define _OAVLTREEDETEVICTION_H
 #include "OAVLTreeInterface.h"
 #include "RandForOramInterface.h"
 #include "UntrustedStorageInterface.h"
@@ -12,9 +12,9 @@
 #include <cmath>
 
 
-class OAVLTreePathEviction : public OAVLTreeInterface {
+class OAVLTreeDeterministicEviction : public OAVLTreeInterface {
     public:
-    OAVLTreePathEviction(UntrustedStorageInterface* storage,
+    OAVLTreeDeterministicEviction(UntrustedStorageInterface* storage,
             RandForOramInterface* rand_gen, int bucket_size, int num_blocks);
             
     int P(int leaf, int level);
@@ -33,7 +33,7 @@ class OAVLTreePathEviction : public OAVLTreeInterface {
     private:
     UntrustedStorageInterface* storage;
     RandForOramInterface* rand_gen;
-
+    int G;
     int bucket_size;
     int num_levels;
     int num_leaves;
@@ -49,6 +49,7 @@ class OAVLTreePathEviction : public OAVLTreeInterface {
     IdGenerator* id_gen;
     Root root;
     void moveToLocal(int leaf, int blockid);
+    int ReverseBits(int G, int bits_length);
     
 };
 
