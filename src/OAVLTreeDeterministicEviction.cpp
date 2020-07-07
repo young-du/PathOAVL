@@ -295,9 +295,13 @@ void OAVLTreeDeterministicEviction::insert(int key, int val) {
         }
     }
     
-    stash.insert(stash.end(), local.begin(), local.end());
-    local.clear();
-    evictTwoPaths();
+    while (!local.empty())
+    {
+        stash.push_back(local[local.size()-1]);
+        local.pop_back();
+        evictTwoPaths();
+    }
+
 }
 
 void OAVLTreeDeterministicEviction::updateHeight() {
@@ -344,6 +348,7 @@ void OAVLTreeDeterministicEviction::evictAfterSearch() {
         } else local[local.size()-2].rightChildPos = local[local.size()-1].leaf_id;
         stash.push_back(local[local.size()-1]);
         local.pop_back();
+        evictTwoPaths();
     }
     local[0].leaf_id = rand_gen->getRandomLeaf();
     stash.push_back(local[0]);

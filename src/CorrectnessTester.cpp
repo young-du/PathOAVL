@@ -72,7 +72,7 @@ void CorrectnessTester::runTester2() {
         }
     }
     // storage->dumpAllValidBlocks();
-    for (int i = 0; i < 3000000; ++i) {
+    for (int i = 0; i < 3000; ++i) {
         int res = oavl->search(i % 1024);
         int s = oavl->getStashSize();
         stat[s] += 1;
