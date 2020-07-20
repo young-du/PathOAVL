@@ -50,7 +50,8 @@ class OAVLTreeDeterministicEviction : public OAVLTreeInterface {
     Root root;
     void moveToLocal(int leaf, int blockid);
     int ReverseBits(int G, int bits_length);
-    
+    void performDummyFinds(int num);
+    void performDummyEvictions(int num);
 };
 
 

@@ -49,7 +49,8 @@ class OAVLTreePathEviction : public OAVLTreeInterface {
     IdGenerator* id_gen;
     Root root;
     void moveToLocal(int leaf, int blockid);
-    
+    void performDummyFinds(int num);
+    void performDummyEvictions(int num);
 };
 
 

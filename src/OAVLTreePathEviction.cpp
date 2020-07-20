@@ -78,7 +78,9 @@ void OAVLTreePathEviction::insert(int key, int val) {
         stash.push_back(to_insert);
         root.leaf_id = to_insert.leaf_id;
         root.id = to_insert.id;
+        performDummyFinds(num_levels);
         evictTwoPaths();
+        performDummyEvictions(num_levels - 1);
         return;
     }
     moveToLocal(root.leaf_id, root.id);
@@ -293,13 +295,15 @@ void OAVLTreePathEviction::insert(int key, int val) {
             root.leaf_id = local[2].leaf_id;
         }
     }
-    
+    int l = local.size();
+    performDummyFinds(num_levels - l);
     while (!local.empty())
     {
         stash.push_back(local[local.size()-1]);
         local.pop_back();
         evictTwoPaths();
     }
+    performDummyEvictions(num_levels - l);
 }
 
 void OAVLTreePathEviction::updateHeight() {
@@ -333,7 +337,10 @@ int OAVLTreePathEviction::search(int key) {
         b = local[local.size() - 1];
     }
     int val = b.data[1];
+    int l = local.size();
+    performDummyFinds(num_levels - l);
     evictAfterSearch();
+    performDummyEvictions(num_levels - l);
     return val;
 }
 
@@ -462,3 +469,19 @@ void OAVLTreePathEviction::dumpStash() {
     }
 }
 
+void OAVLTreePathEviction::performDummyFinds(int num) {
+    for (int i = 0; i < num; ++i) {
+        auto leaf = rand_gen->getRandomLeaf();
+        for (int i = 0; i < num_levels; i++) {
+            vector<Block> blocks = storage->readBucket(P(leaf, i)).getBlocks();
+            Bucket writeBack;
+            for (Block &b: blocks) {
+                writeBack.addBlock(b);
+            }
+            storage->writeBucket(P(leaf, i), writeBack);
+        }
+    }
+}
+void OAVLTreePathEviction::performDummyEvictions(int num) {
+    for (int i = 0; i < num; ++i) evictTwoPaths();
+}
