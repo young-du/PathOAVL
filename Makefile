@@ -14,8 +14,6 @@ CPPFLAGS := -Iinclude
 CFLAGS := -std=c++11 -g -Werror -O3
 
 MAIN = avl
-TEST = PORAMTest
-TEST_FULL = PORAMTest
 
 all: clean $(MAIN)
 test: clean_test $(TEST)
